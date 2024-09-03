@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Метод Ньютона</title>
+</head>
+<body >
+    <h1>Метод Ньютона для функции f(x) = 3sin(8x) - 0.7x + 0.9</h1>
+    <p>Результаты проверяйте в консоли разработчика.</p>
+   <script>
+      // Определение функции f(x)
+      function f(x) {
+    return 3 * Math.sin(8 * x) - 0.7 * x + 0.9;
+}
+
+// Метод хорд
+function secantMethod(f, x0, x1, epsilon, maxIterations) {
+    let n = 0;  // Количество итераций
+    let fCalculations = 0;  // Количество вычислений функции
+    const startTime = Date.now();  // Начальное время
+
+    let fx0 = f(x0);
+    let fx1 = f(x1);
+    fCalculations += 2;
+
+    while (Math.abs(x1 - x0) > epsilon && n < maxIterations) {
+        let x2 = x1 - fx1 * (x1 - x0) / (fx1 - fx0);
+        x0 = x1;
+        fx0 = fx1;
+        x1 = x2;
+        fx1 = f(x1);
+        fCalculations += 1;
+        n += 1;
+    }
+
+    if (Math.abs(x1 - x0) > epsilon) {
+        console.log("Метод хорд не достиг необходимой точности.");
+        return null;
+    }
+
+    return { root: x1, iterations: n, fCalculations, execTime: Date.now() - startTime };
+}
+
+// Пример использования
+const x0 = 0.5;   // Начальное приближение x0
+const x1 = 0.6;   // Начальное приближение x1
+const epsilon = 1e-6;  // Точность
+const maxIterations = 100;  // Максимальное количество итераций
+
+// Вызов метода хорд
+const result = secantMethod(f, x0, x1, epsilon, maxIterations);
+
+if (result) {
+    console.log(`Корень: ${result.root.toFixed(2)}`);
+    console.log(`Количество итераций: ${result.iterations}`);
+    console.log(`Количество вычислений функции: ${result.fCalculations}`);
+    console.log(`Время выполнения: ${result.execTime} ms`);
+} else {
+    console.log("Метод хорд не достиг необходимой точности.");
+}
+
+
+   </script>
+</body>
+</html>
